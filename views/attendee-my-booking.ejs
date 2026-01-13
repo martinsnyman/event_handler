@@ -1,0 +1,66 @@
+<!-- START: My Booking feature (docs used) -->
+<!-- EJS basics + tags: https://ejs.co/#docs -->
+<!-- HTML forms + input types (number/email): https://developer.mozilla.org/en-US/docs/Learn/Forms -->
+<!-- END: My Booking feature (docs used) -->
+
+<%- include('partials/page-start.ejs', { title: 'My Booking' }) %>
+
+<h1>My Booking</h1>
+
+<section class="card">
+    <% if (error) { %>
+        <p class="alert"><%= error %></p>
+    <% } %>
+
+    <form action="/attendee/my-booking" method="post" class="form">
+        <label class="label" for="booking_id">Booking reference</label>
+        <input class="input" id="booking_id" type="number" min="1" step="1" name="booking_id" required />
+
+        <label class="label" for="attendee_email">Email</label>
+        <input class="input" id="attendee_email" type="email" name="attendee_email" required />
+
+        <div class="actions">
+            <button class="button" type="submit">Find booking</button>
+            <a class="button button-secondary" href="/attendee">Back</a>
+        </div>
+    </form>
+</section>
+
+<% if (booking) { %>
+    <section class="card">
+        <h2 class="card-title">Booking details</h2>
+        <p class="muted">
+            Reference: <strong>#<%= booking.booking_id %></strong><br/>
+            Event: <strong><%= booking.event_title %></strong><br/>
+            Date: <%= booking.event_date_display %>
+        </p>
+
+        <p>
+            Name: <%= booking.attendee_name %><br/>
+            Email: <%= booking.attendee_email %>
+        </p>
+
+        <p>
+            Full tickets: <%= booking.full_qty %><br/>
+            Student Tickets: <%= booking.concession_qty %><br/>
+            Total: <strong><%= booking.total_display %></strong>
+        </p>
+
+        <p class="muted">
+            Status: <strong><%= booking.is_active ? 'Active' : 'Cancelled' %></strong>
+        </p>
+
+        <% if (booking.is_active) { %>
+            <form action="/attendee/bookings/<%= booking.booking_id %>/cancel" method="post" class="form">
+                <input type="hidden" name="attendee_email" value="<%= booking.attendee_email %>" />
+                <input type="hidden" name="event_id" value="<%= booking.event_id %>" />
+                <button class="button button-danger" type="submit">Cancel booking</button>
+            </form>
+        <% } %>
+    </section>
+<% } %>
+
+<%- include('partials/page-end.ejs') %>
+
+<!-- START: My Booking feature (docs used) -->
+<!-- END: My Booking feature (docs used) -->

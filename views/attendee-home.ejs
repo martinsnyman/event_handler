@@ -1,0 +1,34 @@
+<%- include('partials/page-start.ejs', { title: 'Attendees' }) %>
+
+<h1>Attendees</h1>
+
+<section class="card">
+    <h2 class="card-title"><%= site.site_name %></h2>
+    <p class="muted"><%= site.site_description %></p>
+    <div class="actions">
+        <!-- START: My Booking feature (docs used) -->
+        <!-- Basic links/navigation (HTML): https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a -->
+        <!-- END: My Booking feature (docs used) -->
+        <a class="button button-secondary" href="/attendee/my-booking">My Booking</a>
+    </div>
+</section>
+
+<section class="card">
+    <h2 class="card-title">Upcoming Events</h2>
+    <% if (!events.length) { %>
+        <p class="muted">No published events available.</p>
+    <% } else { %>
+        <ul class="list">
+            <% events.forEach(function (event) { %>
+                <li class="list-item">
+                    <a href="/attendee/events/<%= event.event_id %>">
+                        <strong><%= event.title %></strong>
+                        <span class="muted"> - <%= event.event_date_display %></span>
+                    </a>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+</section>
+
+<%- include('partials/page-end.ejs') %>

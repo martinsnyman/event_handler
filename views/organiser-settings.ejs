@@ -1,0 +1,25 @@
+<%- include('partials/page-start.ejs', { title: 'Site Settings' }) %>
+
+<h1>Site Settings Page</h1>
+
+<section class="card">
+    <% if (error) { %>
+        <p class="alert"><%= error %></p>
+    <% } %>
+
+    <form action="/organiser/settings" method="post" class="form">
+        <label class="label" for="site_name">Name</label>
+        <input class="input" id="site_name" type="text" name="site_name" value="<%= site.site_name %>" required />
+
+        <label class="label" for="site_description">Description</label>
+        <textarea class="textarea" id="site_description" name="site_description" required><%= site.site_description %></textarea>
+
+        <div class="actions">
+            <button class="button" type="submit">Save Settings</button>
+            <a class="button button-secondary" href="/organiser">Back</a>
+        </div>
+    </form>
+</section>
+
+<%- include('partials/page-end.ejs') %>
+

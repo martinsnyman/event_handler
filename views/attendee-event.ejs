@@ -1,0 +1,70 @@
+<!-- START: related docs (EJS includes) -->
+<!-- EJS include syntax: https://ejs.co/#docs -->
+<!-- END: related docs -->
+<%- include('partials/page-start.ejs', { title: 'Event' }) %>
+
+<h1>Attendee Event Page</h1>
+
+<section class="card">
+    <h2 class="card-title"><%= event.title %></h2>
+    <p class="muted"><%= event.event_date_display %></p>
+    <p><%= event.description %></p>
+
+    <div class="grid-2">
+        <div class="card subtle">
+            <h3 class="card-title">Tickets</h3>
+            <p>Full-price: <strong><%= event.full_price_display %></strong> (<%= event.full_remaining %> remaining)</p>
+            <p>Student: <strong><%= event.concession_price_display %></strong> (<%= event.concession_remaining %> remaining)</p>
+        </div>
+        <div class="card subtle">
+            <h3 class="card-title">Booking</h3>
+
+            <% if (info) { %>
+                <p class="alert alert-success"><%= info %></p>
+            <% } %>
+
+            <% if (error) { %>
+                <p class="alert"><%= error %></p>
+            <% } %>
+
+            <% if (booking) { %>
+                <p class="alert alert-success">
+                    Booking confirmed. Reference: <strong>#<%= booking.booking_id %></strong>
+                </p>
+                <p class="muted">
+                    <%= booking.attendee_name %> — <%= booking.attendee_email %><br/>
+                    Full: <%= booking.full_qty %>, Student: <%= booking.concession_qty %><br/>
+                    Status: <%= booking.is_active ? 'Active' : 'Cancelled' %>
+                </p>
+
+                <% if (booking.is_active) { %>
+                    <form action="/attendee/bookings/<%= booking.booking_id %>/cancel" method="post" class="form">
+                        <input type="hidden" name="attendee_email" value="<%= booking.attendee_email %>" />
+                        <input type="hidden" name="event_id" value="<%= booking.event_id %>" />
+                        <button class="button button-danger" type="submit">Cancel booking</button>
+                    </form>
+                <% } %>
+            <% } else { %>
+                <form action="/attendee/events/<%= event.event_id %>/book" method="post" class="form">
+                    <label class="label" for="attendee_name">Your name</label>
+                    <input class="input" id="attendee_name" type="text" name="attendee_name" required />
+
+                    <label class="label" for="attendee_email">Your email</label>
+                    <input class="input" id="attendee_email" type="email" name="attendee_email" required />
+
+                    <label class="label" for="full_qty">Full-price tickets</label>
+                    <input class="input" id="full_qty" type="number" min="0" max="<%= event.full_remaining %>" step="1" name="full_qty" value="0" required />
+
+                    <label class="label" for="concession_qty">Student Tickets</label>
+                    <input class="input" id="concession_qty" type="number" min="0" max="<%= event.concession_remaining %>" step="1" name="concession_qty" value="0" required />
+
+                    <button class="button" type="submit">Book</button>
+                </form>
+            <% } %>
+        </div>
+    </div>
+
+    <p><a href="/attendee">Back to Attendees</a></p>
+</section>
+
+<%- include('partials/page-end.ejs') %>

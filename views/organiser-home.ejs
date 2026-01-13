@@ -1,0 +1,101 @@
+<%- include('partials/page-start.ejs', { title: 'Organize an Event' }) %>
+
+<h1>Organize an Event</h1>
+
+<section class="card">
+    <h2 class="card-title"><%= site.site_name %></h2>
+    <p class="muted"><%= site.site_description %></p>
+    <div class="actions">
+        <a class="button button-secondary" href="/organiser/settings">Site Settings</a>
+        <form class="inline" action="/organiser/events/new" method="post">
+            <button class="button" type="submit">Create New Event</button>
+        </form>
+    </div>
+</section>
+
+<section class="card">
+    <h2 class="card-title">Published Events</h2>
+    <% if (!publishedEvents.length) { %>
+        <p class="muted">No published events yet.</p>
+    <% } else { %>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Created</th>
+                    <th>Published</th>
+                    <th>Tickets</th>
+                    <th>Share</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% publishedEvents.forEach(function (event) { %>
+                    <tr>
+                        <td>
+                            <a href="/organiser/events/<%= event.event_id %>/edit"><%= event.title %></a>
+                        </td>
+                        <td><%= event.event_datetime %></td>
+                        <td><%= event.created_at %></td>
+                        <td><%= event.published_at || '' %></td>
+                        <td>
+                            Full: <%= event.full_remaining %>/<%= event.full_ticket_total %> @ <%= event.full_price_display %><br/>
+                            Student: <%= event.concession_remaining %>/<%= event.concession_ticket_total %> @ <%= event.concession_price_display %>
+                        </td>
+                        <td>
+                            <a href="/attendee/events/<%= event.event_id %>">/attendee/events/<%= event.event_id %></a>
+                        </td>
+                        <td class="nowrap">
+                            <form class="inline" action="/organiser/events/<%= event.event_id %>/delete" method="post">
+                                <button class="button button-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</section>
+
+<section class="card">
+    <h2 class="card-title">Draft Events</h2>
+    <% if (!draftEvents.length) { %>
+        <p class="muted">No draft events yet.</p>
+    <% } else { %>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Created</th>
+                    <th>Tickets</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% draftEvents.forEach(function (event) { %>
+                    <tr>
+                        <td><a href="/organiser/events/<%= event.event_id %>/edit"><%= event.title %></a></td>
+                        <td><%= event.event_datetime %></td>
+                        <td><%= event.created_at %></td>
+                        <td>
+                            Full: <%= event.full_ticket_total %> @ <%= event.full_price_display %><br/>
+                            Student: <%= event.concession_ticket_total %> @ <%= event.concession_price_display %>
+                        </td>
+                        <td class="nowrap">
+                            <form class="inline" action="/organiser/events/<%= event.event_id %>/publish" method="post">
+                                <button class="button" type="submit">Publish</button>
+                            </form>
+                            <form class="inline" action="/organiser/events/<%= event.event_id %>/delete" method="post">
+                                <button class="button button-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+</section>
+
+<%- include('partials/page-end.ejs') %>
