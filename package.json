@@ -1,7 +1,7 @@
 {
-  "name": "cm2040_template",
+  "name": "iron-forge-events",
   "version": "1.0.0",
-  "description": "A template for the mid-term assignment",
+  "description": "Full-stack event booking app (Node.js, Express, EJS, SQLite) with organiser and attendee portals",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,15 +11,15 @@
     "clean-db-win": "node scripts/clean-db.js",
     "start": "node index.js"
   },
-  "author": "Simon Katan",
+  "author": "Martin Snyman",
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "sqlite3": "^5.1.2"
   },
-  "engines" : { 
-    "npm" : ">=8.0.0",
-    "node" : ">=16.0.0"
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   }
 }
